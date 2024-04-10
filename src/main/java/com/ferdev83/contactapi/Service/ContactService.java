@@ -2,6 +2,8 @@ package com.ferdev83.contactapi.Service;
 
 import com.ferdev83.contactapi.Entity.Contact;
 import com.ferdev83.contactapi.Repository.ContactRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,8 +22,10 @@ import java.util.function.Function;
 import static com.ferdev83.contactapi.Constant.Constant.PHOTO_DIRECTORY;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
+@Transactional(rollbackOn=Exception.class)
+@RequiredArgsConstructor
 public class ContactService {
-    private ContactRepository contactRepository;
+    private final ContactRepository contactRepository;
 
     public Page<Contact> getAllContacts(int page, int size) {
         return contactRepository.findAll(PageRequest.of(page, size, Sort.by("name")));
